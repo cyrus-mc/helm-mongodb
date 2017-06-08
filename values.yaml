@@ -33,6 +33,15 @@ resources: {}
 #   cpu: 100m
 #   memory: 512Mi
 
+Persistence:
+  Enabled: false
+
+  StorageClass: standard
+  AccessMode: ReadWriteOnce
+  Size: 10Gi
+
+  Annotations: {}
+
 persistentVolume:
   enabled: false
   ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
