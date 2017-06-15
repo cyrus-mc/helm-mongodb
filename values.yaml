@@ -14,13 +14,13 @@ auth:
 installImage:
   name: gcr.io/google_containers/mongodb-install
   tag: 0.4
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 # Specs for the MongoDB image
 image:
   name: mongo
   tag: 3.4
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 # Annotations to be added to MongoDB pods
 podAnnotations: {}
@@ -42,16 +42,25 @@ Persistence:
 
   Annotations: {}
 
-persistentVolume:
-  enabled: false
-  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
-  ## Default: volume.alpha.kubernetes.io/storage-class: default
-  ##
-  storageClass: standard
-  accessModes:
-    - ReadWriteOnce
-  size: 10Gi
-  annotations: {}
+Backup:
+  Enabled: true
+
+  Image:
+    Name: "quay.io/smarsh/mongodump"
+    Tag: "s3"
+
+  Resources: {}
+
+  Persistence:
+    Enabled: false
+
+    StorageClass: standard
+    AccessMode: ReadWriteOnce
+    Size: 10Gi
+
+    Annotations: {}
+
+  S3_Bucket: "development.smarsh.com"
 
 # Annotations to be added to the service
 serviceAnnotations: {}
