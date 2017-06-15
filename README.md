@@ -41,11 +41,11 @@ The following tables lists the configurable parameters of the mongodb chart and 
 | `image.pullPolicy`              | MongoDB image pull policy                                                 | IfNotPresent                                        |
 | `podAnnotations`                | Annotations to be added to MongoDB pods                                   | {}                                                  |
 | `resources`                     | Pod resource requests and limits                                          | {}                                                  |
-| `persistentVolume.enabled`      | If `true`, persistent volume claims are created                           | `true`                                              |
-| `persistentVolume.storageClass` | Persistent volume storage class                                           | `volume.alpha.kubernetes.io/storage-class: default` |
-| `persistentVolume.accessMode`   | Persistent volume access modes                                            | [ReadWriteOnce]                                     |
-| `persistentVolume.size`         | Persistent volume size                                                    | 10Gi                                                |
-| `persistentVolume.annotations`  | Persistent volume annotations                                             | {}                                                  |
+| `Persistence.Enabled`           | If `true`, persistent volume claims are created                           | `true`                                              |
+| `Persistence.StorageClass`      | Persistent volume storage class                                           | `volume.alpha.kubernetes.io/storage-class: default` |
+| `Persistence.AccessMode`        | Persistent volume access modes                                            | [ReadWriteOnce]                                     |
+| `Persistence.Size`              | Persistent volume size                                                    | 10Gi                                                |
+| `Persistence.Annotations`       | Persistent volume annotations                                             | {}                                                  |
 | `auth.enabled`                  | If `true`, keyfile access control is enabled                              | `false`                                             |
 | `auth.key`                      | key for internal authentication                                           |                                                     |
 | `auth.existingKeySecret`        | If set, an existing secret with this name for the key is used             |                                                     |
