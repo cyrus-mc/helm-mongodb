@@ -3,7 +3,8 @@ kind: StatefulSet
 metadata:
   labels:
     app: {{ template "name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    chart: {{ .Chart.Name | quote }}
+    version: {{ .Chart.Version | quote }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   name: {{ template "fullname" . }}
@@ -110,6 +111,8 @@ spec:
         prometheus.io/port: '{{ .Values.Monitoring.Port.Container }}'
 {{- end }}
     spec:
+      affinity:
+{{ toYaml .Values.Scheduling.Affinity | indent 8 }}
       containers:
       - name: {{ template "name" . }}
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
