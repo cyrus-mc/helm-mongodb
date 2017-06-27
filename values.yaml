@@ -70,7 +70,7 @@ Persistence:
   Annotations: {}
 
 Backup:
-  Enabled: true
+  Enabled: false
 
   Image:
     Name: "quay.io/smarsh/mongodump"

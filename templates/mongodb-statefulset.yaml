@@ -7,7 +7,9 @@ metadata:
     version: {{ .Chart.Version | quote }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
+    cluster: {{ template "fullname" . }}
   name: {{ template "fullname" . }}
+  namespace: {{ .Values.Namespace | default "default" }}
 spec:
   serviceName: {{ template "fullname" . }}
   replicas: {{ .Values.replicas }}
@@ -16,6 +18,7 @@ spec:
       labels:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
+        cluster: {{ template "fullname" . }}
       annotations:
       {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations | indent 8}}

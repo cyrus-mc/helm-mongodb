@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "fullname" . }}-tests
+  namespace: {{ .Values.Namespace | default "default" }}
   labels:
     app: {{ template "fullname" . }}-tests
 data:

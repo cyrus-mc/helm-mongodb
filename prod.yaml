@@ -1,0 +1,23 @@
+Namespace: &namespace production
+
+Scheduling:
+  Affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - mongodb
+          - key: namespace
+            operator: In
+            values:
+            - *namespace
+
+Persistence:
+  Enabled: true
+  Size: 150Gi
+
+Monitoring:
+  Enabled: true
