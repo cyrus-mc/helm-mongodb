@@ -114,12 +114,14 @@ spec:
         prometheus.io/port: '{{ .Values.Monitoring.Port.Container }}'
 {{- end }}
     spec:
+      {{- if .Values.Scheduling.Enabled }}
       affinity:
 {{ toYaml .Values.Scheduling.Affinity | indent 8 }}
+      {{- end }}
       containers:
-      - name: {{ template "name" . }}
-        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+      - name: mongodb
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
           - name: peer
             containerPort: {{ .Values.port }}
@@ -131,16 +133,16 @@ spec:
         {{- if .Values.auth.enabled }}
         env:
         - name: AUTH
-          value: "true"
+          value: true
         - name: ADMIN_USER
           valueFrom:
             secretKeyRef:
-              name: "{{ template "adminSecret" . }}"
+              name: {{ template "adminSecret" . }}
               key: user
         - name: ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: "{{ template "adminSecret" . }}"
+              name: {{ template "adminSecret" . }}
               key: password
         {{- end }}
         livenessProbe:
@@ -172,12 +174,12 @@ spec:
           readOnly: true
         {{- end }}
 {{- if .Values.Monitoring.Enabled }}
-      - name: 'exporter'
-        image: '{{ .Values.Monitoring.Image.Name }}:{{ .Values.Monitoring.Image.Tag }}'
+      - name: exporter
+        image: {{ .Values.Monitoring.Image.Name }}:{{ .Values.Monitoring.Image.Tag }}
         ports:
         - containerPort: {{ .Values.Monitoring.Port.Container }}
-          name: 'exporter'
-          protocol: 'TCP'
+          name: exporter
+          protocol: TCP
 {{- end }}
       volumes:
         - name: config
