@@ -8,7 +8,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
     cluster: {{ template "fullname" . }}
-  name: {{ template "fullname" . }}
+  name: {{ template "shortname" . }}
   namespace: {{ .Values.Namespace | default "default" }}
 spec:
   serviceName: {{ template "fullname" . }}
