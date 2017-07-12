@@ -11,7 +11,7 @@ metadata:
   name: {{ template "shortname" . }}
   namespace: {{ .Values.Namespace | default "default" }}
 spec:
-  serviceName: {{ template "fullname" . }}
+  serviceName: {{ template "shortname" . }}
   replicas: {{ .Values.replicas }}
   template:
     metadata:
@@ -44,7 +44,7 @@ spec:
                 "name": "bootstrap",
                 "image": "{{ .Values.image.name }}:{{ .Values.image.tag }}",
                 "command": ["/work-dir/peer-finder"],
-                "args": ["-on-start=/work-dir/on-start.sh", "-service={{ template "fullname" . }}"],
+                "args": ["-on-start=/work-dir/on-start.sh", "-service={{ template "shortname" . }}"],
                 "imagePullPolicy": "{{ .Values.image.pullPolicy }}",
                 "env": [
                     {
