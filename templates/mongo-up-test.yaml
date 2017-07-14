@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ template "fullname" . }}-test
+  name: {{ template "shortname" . }}-test
   namespace: {{ .Values.Namespace | default "default" }}
   annotations:
     "helm.sh/hook": test-success
@@ -34,5 +34,5 @@ spec:
     emptyDir: {}
   - name: tests
     configMap:
-      name: {{ template "fullname" . }}-tests
+      name: {{ template "shortname" . }}-tests
   restartPolicy: Never

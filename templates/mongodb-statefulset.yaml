@@ -184,7 +184,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ template "fullname" . }}
+            name: {{ template "shortname" . }}
         {{- if .Values.auth.enabled }}
         - name: keydir
           secret:
