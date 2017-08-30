@@ -1,4 +1,4 @@
-Namespace: &namespace production
+Namespace: &namespace dev
 
 Scheduling:
   Enabled: true
@@ -31,3 +31,4 @@ Persistence:
 
 Monitoring:
   Enabled: true
+

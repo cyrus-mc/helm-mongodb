@@ -15,6 +15,15 @@ Scheduling:
             operator: In
             values:
             - *namespace
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: chart
+            operator: In
+            values:
+            - mongodb-replicaset
+        topologyKey: 'kubernetes.io/hostname'
 
 Persistence:
   Enabled: true
