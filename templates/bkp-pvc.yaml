@@ -3,9 +3,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ template "fullname" . }}-backup
-  namespace: {{ .Values.Namespace | default "default" }}
+  namespace: {{ .Values.Namespace | default .Release.Namespace }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: {{ .Chart.Name }}
     component: {{ template "fullname" . }}-backup
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}

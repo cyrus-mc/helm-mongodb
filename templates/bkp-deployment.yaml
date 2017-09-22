@@ -3,19 +3,19 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: {{ .Chart.Name }}
     component: {{ template "fullname" . }}-backup
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
   name: {{ template "fullname" . }}-backup
-  namespace: {{ .Values.Namespace | default "default" }}
+  namespace: {{ .Values.Namespace | default .Release.Namespace }}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         component: {{ template "fullname" . }}-backup
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        chart: {{ .Chart.Name }}
         heritage: {{ .Release.Service | quote }}
         release: {{ .Release.Name | quote }}
     spec:

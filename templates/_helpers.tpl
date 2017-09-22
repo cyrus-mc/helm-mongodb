@@ -41,3 +41,29 @@ Create the name for the key secret.
         {{- template "fullname" . -}}-keyfile
     {{- end -}}
 {{- end -}}
+
+{{- define "database-scheduling" -}}
+{{- $namespace := default .Release.Namespace .Values.Namespace -}}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: role
+          operator: In
+          values:
+          - postgres
+        - key: namespace
+          operator: In
+          values:
+{{ printf "- %s" $namespace | indent 12 }}
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: chart
+          operator: In
+          values:
+          - mongodb-replicaset
+      topologyKey: 'kubernetes.io/hostname'
+{{- end }}

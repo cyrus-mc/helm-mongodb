@@ -3,11 +3,11 @@ kind: ConfigMap
 metadata:
   labels:
     app: {{ template "name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    chart: {{ .Chart.Name }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   name: {{ template "shortname" . }}
-  namespace: {{ .Values.Namespace | default "default" }}
+  namespace: {{ .Values.Namespace | default .Release.Namespace }}
 data:
   mongod.conf: |
 {{ toYaml .Values.configmap | indent 4 }}

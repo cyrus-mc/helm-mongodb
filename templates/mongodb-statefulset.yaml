@@ -4,7 +4,6 @@ metadata:
   labels:
     app: {{ template "name" . }}
     chart: {{ .Chart.Name | quote }}
-    version: {{ .Chart.Version | quote }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
     cluster: {{ template "fullname" . }}
@@ -12,7 +11,7 @@ metadata:
     approle: database
     apptype: mongodb
   name: {{ template "shortname" . }}
-  namespace: {{ .Values.Namespace | default "default" }}
+  namespace: {{ .Values.Namespace | default .Release.Namespace }}
 spec:
   serviceName: {{ template "shortname" . }}
   replicas: {{ .Values.replicas }}
@@ -122,8 +121,7 @@ spec:
 {{- end }}
     spec:
       {{- if .Values.Scheduling.Enabled }}
-      affinity:
-{{ toYaml .Values.Scheduling.Affinity | indent 8 }}
+{{ include "database-scheduling" . | indent 6 }}
       {{- end }}
       containers:
       - name: mongodb

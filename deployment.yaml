@@ -1,0 +1,9 @@
+Scheduling:
+  Enabled: true
+
+Persistence:
+  Enabled: true
+  Size: 150Gi
+
+Monitoring:
+  Enabled: true

@@ -1,5 +1,3 @@
-Namespace: &namespace default
-
 replicaSet: rs0
 replicas: 3
 port: 27017
@@ -37,29 +35,6 @@ resources: {}
 
 Scheduling:
   Enabled: false
-  Affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: role
-            operator: In
-            values:
-            - mongodb
-          - key: namespace
-            operator: In
-            values:
-            - *namespace
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: chart
-            operator: In
-            values:
-            - mongodb-replicaset
-        topologyKey: 'kubernetes.io/hostname'
-
 
 Persistence:
   Enabled: false
