@@ -29,91 +29,6 @@ spec:
       {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations | indent 8}}
       {{- end }}
-        pod.alpha.kubernetes.io/init-containers: '[
-            {
-                "name": "install",
-                "image": "{{ .Values.installImage.name }}:{{ .Values.installImage.tag }}",
-                "args": ["--work-dir=/work-dir"],
-                "imagePullPolicy": "{{ .Values.installImage.pullPolicy }}",
-                "volumeMounts": [
-                    {
-                        "name": "workdir",
-                        "mountPath": "/work-dir"
-                    },
-                    {
-                        "name": "config",
-                        "mountPath": "/config"
-                    }
-                ]
-            },
-            {
-                "name": "bootstrap",
-                "image": "{{ .Values.image.name }}:{{ .Values.image.tag }}",
-                "command": ["/work-dir/peer-finder"],
-                "args": ["-on-start=/work-dir/on-start.sh", "-service={{ template "shortname" . }}"],
-                "imagePullPolicy": "{{ .Values.image.pullPolicy }}",
-                "env": [
-                    {
-                        "name": "POD_NAMESPACE",
-                        "valueFrom": {
-                            "fieldRef": {
-                                "apiVersion": "v1",
-                                "fieldPath": "metadata.namespace"
-                            }
-                        }
-                    },
-                    {
-                        "name": "REPLICA_SET",
-                        "value": "{{ .Values.replicaSet }}"
-                    }
-                    {{- if .Values.auth.enabled }},
-                    {
-                        "name": "AUTH",
-                        "value": "true"
-                    },
-                    {
-                        "name": "ADMIN_USER",
-                        "valueFrom": {
-                            "secretKeyRef": {
-                                "name": "{{ template "adminSecret" . }}",
-                                "key": "user"
-                            }
-                        }
-                    },
-                    {
-                        "name": "ADMIN_PASSWORD",
-                        "valueFrom": {
-                            "secretKeyRef": {
-                                "name": "{{ template "adminSecret" . }}",
-                                "key": "password"
-                            }
-                        }
-                    }
-                    {{- end }}
-                ],
-                "volumeMounts": [
-                    {
-                        "name": "workdir",
-                        "mountPath": "/work-dir"
-                    },
-                    {
-                        "name": "config",
-                        "mountPath": "/config"
-                    },
-                    {
-                        "name": "datadir",
-                        "mountPath": "/data/db"
-                    }
-                    {{- if .Values.auth.enabled }},
-                    {
-                        "name": "keydir",
-                        "mountPath": "/keydir",
-                        "readOnly": true
-                    }
-                    {{- end }}
-                ]
-            }
-        ]'
 {{- if .Values.Monitoring.Enabled }}
         prometheus.io/scrape: 'true'
         prometheus.io/path: '/metrics'
@@ -123,6 +38,59 @@ spec:
       {{- if .Values.Scheduling.Enabled }}
 {{ include "database-scheduling" . | indent 6 }}
       {{- end }}
+      initContainers:
+      - name: install
+        image: {{ .Values.installImage.name }}:{{ .Values.installImage.tag }}
+        args:
+        - --work-dir=/work-dir
+        imagePullPolicy: {{ .Values.installImage.pullPolicy }}
+        volumeMounts:
+        - name: workdir
+          mountPath: /work-dir
+        - name: config
+          mountPath: /config
+      - name: bootstrap
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        command:
+        - /work-dir/peer-finder
+        args:
+        - -on-start=/work-dir/on-start.sh
+        - -service={{ template "shortname" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: REPLICA_SET
+          value: {{ .Values.replicaSet }}
+        {{- if .Values.auth.enabled }}
+        - name: AUTH
+          value: true
+        - name: ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "adminSecret" . }}
+              key: user
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "adminSecret" . }}
+              key: password
+        {{- end }}
+        volumeMounts:
+        - name: workdir
+          mountPath: /work-dir
+        - name: config
+          mountPath: /config
+        - name: datadir
+          mountPath: /data/db
+        {{- if .Values.auth.enabled }}
+        - name: keydir
+          mountPath: /keydir
+          readOnly: true
+        {{- end }}
       containers:
       - name: mongodb
         image: {{ .Values.image.name }}:{{ .Values.image.tag }}
