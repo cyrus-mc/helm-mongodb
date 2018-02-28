@@ -36,34 +36,21 @@ resources: {}
 Scheduling:
   Enabled: false
 
+Backup:
+  Enabled: true
+
+  Schedule: "*/5 * * * *"
+
+  TTL: "720h0m0s"
+
 Persistence:
-  Enabled: false
+  Enabled: true
 
   StorageClass: standard
   AccessMode: ReadWriteOnce
   Size: 10Gi
 
   Annotations: {}
-
-Backup:
-  Enabled: false
-
-  Image:
-    Name: "quay.io/smarsh/mongodump"
-    Tag: "s3"
-
-  Resources: {}
-
-  Persistence:
-    Enabled: false
-
-    StorageClass: standard
-    AccessMode: ReadWriteOnce
-    Size: 10Gi
-
-    Annotations: {}
-
-  S3_Bucket: "development.smarsh.com"
 
 # Annotations to be added to the service
 serviceAnnotations: {}
