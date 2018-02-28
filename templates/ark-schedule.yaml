@@ -1,0 +1,22 @@
+{{- if .Values.Backup.Enabled -}}
+apiVersion: ark.heptio.com/v1
+kind: Schedule
+metadata:
+  labels:
+    chart: {{ .Chart.Name | quote }}
+    component: {{ template "fullname" . }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+  name: {{ template "shortname" . }}
+  namespace: kube-system
+spec:
+  schedule: {{ .Values.Backup.Schedule | quote }}
+  template:
+    includedNamespaces:
+    - '*'
+    labelSelector:
+      matchLabels:
+        component: {{ template "fullname" . }}
+    snapshotVolumes: {{ .Values.Persistence.Enabled }}
+    ttl: {{ .Values.Backup.TTL }}720h0m0s
+{{- end }}
