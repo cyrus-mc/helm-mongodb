@@ -13,8 +13,8 @@ metadata:
     prometheus.io/port: '{{ .Values.Monitoring.Port.Container }}'
 {{- end }}
   labels:
-    app: {{ template "name" . }}
     chart: {{ .Chart.Name }}
+    component: {{ template "fullname" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   name: {{ template "shortname" . }}
@@ -26,5 +26,4 @@ spec:
     - name: peer
       port: {{ .Values.port }}
   selector:
-    app: {{ template "name" . }}
-    release: {{ .Release.Name }}
+    component: {{ template "fullname". }}

@@ -2,14 +2,10 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   labels:
-    app: {{ template "name" . }}
     chart: {{ .Chart.Name | quote }}
+    component: {{ template "fullname" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    cluster: {{ template "fullname" . }}
-    ## DBA requested labels
-    approle: database
-    apptype: mongodb
   name: {{ template "shortname" . }}
   namespace: {{ .Values.Namespace | default .Release.Namespace }}
 spec:
@@ -18,13 +14,10 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
         chart: {{ .Chart.Name | quote }}
+        component: {{ template "fullname" . }}
+        heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
-        cluster: {{ template "fullname" . }}
-        ## DBA requested labels
-        approle: database
-        apptype: mongodb
       annotations:
       {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations | indent 8}}
