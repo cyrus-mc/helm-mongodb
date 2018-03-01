@@ -18,5 +18,5 @@ spec:
       matchLabels:
         component: {{ template "fullname" . }}
     snapshotVolumes: {{ .Values.Persistence.Enabled }}
-    ttl: {{ .Values.Backup.TTL }}720h0m0s
+    ttl: {{ .Values.Backup.TTL }}
 {{- end }}
