@@ -63,6 +63,6 @@ affinity:
         - key: chart
           operator: In
           values:
-          - mongodb-replicaset
+          - mongodb
       topologyKey: 'kubernetes.io/hostname'
 {{- end }}
