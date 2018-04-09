@@ -8,7 +8,7 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
   name: {{ template "shortname" . }}
-  namespace: kube-system
+  namespace: heptio-ark
 spec:
   schedule: {{ .Values.Backup.Schedule | quote }}
   template:
