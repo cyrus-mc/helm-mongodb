@@ -42,27 +42,39 @@ Create the name for the key secret.
 {{- end -}}
 
 {{- define "database-scheduling" -}}
-{{- $namespace := default .Release.Namespace .Values.Namespace -}}
 affinity:
+{{- if .Values.Scheduling.rules.nodeAffinity }}
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
       - matchExpressions:
-        - key: role
+
+{{- range $i := .Values.Scheduling.rules.nodeAffinity }}
+        - key: {{ $i.key }}
           operator: In
           values:
-          - mongodb
-        - key: namespace
-          operator: In
-          values:
-{{ printf "- %s" $namespace | indent 12 }}
+{{- if eq $i.value ".Release.Namespace" }}
+          - {{ $.Release.Namespace -}}
+{{ else }}
+          - {{ $i.value -}}
+{{ end -}}
+{{ end }}
+
+{{- end }}
+
+{{- if .Values.Scheduling.rules.podAntiAffinity }}
   podAntiAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
     - labelSelector:
         matchExpressions:
-        - key: chart
+
+{{- range $i := .Values.Scheduling.rules.podAntiAffinity.matchExpressions }}
+        - key: {{ $i.key }}
           operator: In
           values:
-          - mongodb
-      topologyKey: 'kubernetes.io/hostname'
+          - {{ $i.value -}}
+{{ end }}
+      topologyKey: '{{ .Values.Scheduling.rules.podAntiAffinity.topologyKey }}'
+{{- end }}
+
 {{- end }}

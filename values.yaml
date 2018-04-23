@@ -36,6 +36,19 @@ resources: {}
 Scheduling:
   Enabled: false
 
+  rules:
+    nodeAffinity:
+    - key: role
+      value: mongodb
+    - key: namespace
+      value: .Release.Namespace
+
+    podAntiAffinity:
+      matchExpressions:
+      - key: chart
+        value: mongodb
+      topologyKey: kubernetes.io/hostname
+
 Backup:
   Enabled: false
 
@@ -48,7 +61,7 @@ Persistence:
 
   StorageClass: standard
   AccessMode: ReadWriteOnce
-  Size: 10Gi
+  Size: 1Gi
 
   Annotations: {}
 
